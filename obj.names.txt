@@ -1,0 +1,13 @@
+autorickshaw
+truck
+vehicle fallback
+car
+animal
+motorcycle
+rider
+person
+bus
+bicycle
+traffic sign
+caravan
+traffic light
