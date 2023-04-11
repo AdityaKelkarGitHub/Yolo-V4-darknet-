@@ -1,28 +1,25 @@
-import glob, os
+import os
+import random
 
-# Current directory
-current_dir = os.path.dirname(os.path.abspath(__file__))
+# Set the percentage of images to use for testing
+test_percent = 5
 
-print(current_dir)
+# Set the path to the directory containing the images and annotations
+data_dir = "data"
 
-current_dir = 'data/obj'
+# Get a list of all the image file names in the directory
+image_files = [os.path.join(data_dir, file_name) for file_name in os.listdir(data_dir) if file_name.endswith(".jpg")]
 
-# Percentage of images to be used for the test set
-percentage_test = 10;
+# Randomly shuffle the list of image file names
+random.shuffle(image_files)
 
-# Create and/or truncate train.txt and test.txt
-file_train = open('data/train.txt', 'w')
-file_test = open('data/test.txt', 'w')
+# Calculate the number of images to use for testing
+num_test_images = round(len(image_files) * test_percent / 100)
 
-# Populate train.txt and test.txt
-counter = 1
-index_test = round(100 / percentage_test)
-for pathAndFilename in glob.iglob(os.path.join(current_dir, "*.jpg")):
-    title, ext = os.path.splitext(os.path.basename(pathAndFilename))
-
-    if counter == index_test:
-        counter = 1
-        file_test.write("data/obj" + "/" + title + '.jpg' + "\n")
-    else:
-        file_train.write("data/obj" + "/" + title + '.jpg' + "\n")
-        counter = counter + 1
+# Write the file paths to the output files
+with open(os.path.join(data_dir, "train.txt"), "w") as train_file, open(os.path.join(data_dir, "test.txt"), "w") as test_file:
+    for i, file_path in enumerate(image_files):
+        if i < num_test_images:
+            test_file.write(file_path + "\n")
+        else:
+            train_file.write(file_path + "\n")
